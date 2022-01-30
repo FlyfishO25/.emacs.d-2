@@ -25,11 +25,19 @@
            (setq info (format "%d packages loaded in %s" package-count time)))
          (message info)))
 
+(defun font-available-p (font-name)
+  (find-font (font-spec :name font-name)))
+
 ;; Interface
 
 (setq fira-code '(font . "Fira Code"))
-(unless (memq fira-code default-frame-alist)
-  (push fira-code default-frame-alist))
+(if (and (not (memq fira-code default-frame-alist))
+         (font-available-p "Fira Code"))
+    (progn 
+      (push fira-code default-frame-alist)
+      (set-frame-font "Fira Code-12"))
+  (progn
+    (message "Fira Code not available")))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
